@@ -39,7 +39,7 @@ class BeGateway extends Okay
     if (empty($method))
     	return array('error'=>true);
 
-    $payment_currency = $->money->get_currency(intval($payment_method->currency_id));
+    $payment_currency = $this->money->get_currency(intval($payment_method->currency_id));
     $settings = $this->payment->get_payment_settings($payment_method->id);
 
     \beGateway\Settings::$shopId = $settings['shop_id'];
@@ -88,7 +88,7 @@ class BeGateway extends Okay
       $erip = new \beGateway\PaymentMethod\Erip(array(
         'order_id' => $order_id,
         'account_number' => strval($order_id),
-        'service_no' => $settings['pm_erip_service_no']
+        'service_no' => $settings['pm_erip_service_no'],
         'service_info' => array($desc)
       ));
       $transaction->addPaymentMethod($erip);
