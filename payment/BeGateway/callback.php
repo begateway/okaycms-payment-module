@@ -1,15 +1,15 @@
 <?php
-require_once(__DIR__ . DS . 'begateway-api-php' . DS . 'lib' . DS . 'beGateway.php');
+require_once(__DIR__ . '/begateway-api-php/lib/BeGateway.php');
 // Работаем в корневой директории
 chdir ('../../');
 require_once('api/Okay.php');
 $okay = new OKay();
 
-$webhook = new \beGateway\Webhook;
+$webhook = new \BeGateway\Webhook;
 
 // Сумма, которую заплатил покупатель. Дробная часть отделяется точкой.
-$money = new \beGateway\Money;
-$money->setCents($webhook->getResponse()->transacton->amount);
+$money = new \BeGateway\Money;
+$money->setCents($webhook->getResponse()->transaction->amount);
 $money->setCurrency($webhook->getResponse()->transaction->currency);
 
 $amount = $money->getAmount();
@@ -50,8 +50,8 @@ if(round($okay->money->convert($order->total_price, $method->currency_id, false)
 
 $settings = unserialize($method->settings);
 
-\beGateway\Settings::$shopId = $settings['shop_id'];
-\beGateway\Settings::$shopKey = $settings['shop_key'];
+\BeGateway\Settings::$shopId = $settings['shop_id'];
+\BeGateway\Settings::$shopKey = $settings['shop_key'];
 
 // Проверяем авторизационные данные
 if (!$webhook->isAuthorized())
@@ -69,9 +69,9 @@ foreach($purchases as $purchase)
 		die("Нехватка товара $purchase->product_name $purchase->variant_name");
 	}
 }
-
+$comment = $order->note . "\n" . "UID оплаты: " . $webhook->getUid();
 // Установим статус оплачен
-$okay->orders->update_order(intval($order->id), array('paid'=>1));
+$okay->orders->update_order(intval($order->id), array('paid'=> 1, 'note' => $comment));
 
 // Спишем товары
 $okay->orders->close(intval($order->id));

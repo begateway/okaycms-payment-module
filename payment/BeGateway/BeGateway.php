@@ -1,50 +1,32 @@
 ﻿<?php
-
 require_once('api/Okay.php');
-require_once(__DIR__ . DS . 'begateway-api-php' . DS . 'lib' . DS . 'beGateway.php');
+require_once(__DIR__ . '/begateway-api-php/lib/BeGateway.php');
 
 class BeGateway extends Okay
 {
-
-  private $_order_id;
-
 	public function checkout_form($order_id, $button_text = null)
 	{
-    $this->_order_id = intval($order_id);
+    $order = $this->orders->get_order(intval($order_id));
 
-		if(empty($button_text))
-			$button_text = 'Перейти к оплате';
-
-      $fields = $this->_get_form();
-
-      if ($fields['error']) {
-        $button = '<div class="message_error">Ошибка получения токена на оплату!</div>';
-      } else {
-    		$button =
-          '<form method="POST" action="' . $fields['action'] . '">'.
-  				'<input type="hidden" name="token" value="'.$fields['token'].'"/>'.
-  				'<input type="submit" name="submit-button" value="'.$button_text.'"  class="checkout_button">'.
-  				'</form>';
-      }
-
-		return $button;
-	}
-
-  private function _get_form() {
-    $order = $this->orders->get_order($this->_order_id);
     if (empty($order))
-    	return array('error'=>true);
+    	return array(
+        'error'=>true,
+        'error_message'=>'Ошибка получения данных заказа'
+      );
 
     $payment_method = $this->payment->get_payment_method($order->payment_method_id);
-    if (empty($method))
-    	return array('error'=>true);
+    if (empty($payment_method))
+    	return array(
+        'error'=>true,
+        'error_message'=>'Ошибка получения способа оплаты'
+      );
 
     $payment_currency = $this->money->get_currency(intval($payment_method->currency_id));
     $settings = $this->payment->get_payment_settings($payment_method->id);
 
-    \beGateway\Settings::$shopId = $settings['shop_id'];
-    \beGateway\Settings::$shopKey = $settings['shop_key'];
-    \beGateway\Settings::$checkoutBase = 'https://' . $settings['domain_checkout'];
+    \BeGateway\Settings::$shopId = $settings['shop_id'];
+    \BeGateway\Settings::$shopKey = $settings['shop_key'];
+    \BeGateway\Settings::$checkoutBase = 'https://' . $settings['domain_checkout'];
 
     $desc = 'Оплата заказа №'.$order->id;
     $result_url = $this->config->root_url.'/order/'.$order->url;
@@ -55,7 +37,7 @@ class BeGateway extends Okay
     $firstname = trim($fio_arr[0]);
     $lastname = trim($fio_arr[1]);
 
-    $transaction = new \beGateway\GetPaymentToken;
+    $transaction = new \BeGateway\GetPaymentToken;
 
     $transaction->money->setAmount($order->total_price);
     $transaction->money->setCurrency(str_replace("RUR", "RUB", $payment_currency->code));
@@ -72,20 +54,19 @@ class BeGateway extends Okay
     $transaction->customer->setLastName($lastname);
     $transaction->customer->setEmail($order->email);
     $transaction->customer->setPhone($order->phone);
-    $transaction->setAddressHidden();
 
     if ($settings['pm_bankcard']) {
-      $cc = new \beGateway\PaymentMethod\CreditCard;
+      $cc = new \BeGateway\PaymentMethod\CreditCard;
       $transaction->addPaymentMethod($cc);
     }
 
     if ($settings['pm_bankcard_halva']) {
-      $halva = new \beGateway\PaymentMethod\CreditCardHalva;
+      $halva = new \BeGateway\PaymentMethod\CreditCardHalva;
       $transaction->addPaymentMethod($halva);
     }
 
     if ($settings['pm_erip']) {
-      $erip = new \beGateway\PaymentMethod\Erip(array(
+      $erip = new \BeGateway\PaymentMethod\Erip(array(
         'order_id' => $order_id,
         'account_number' => strval($order_id),
         'service_no' => $settings['pm_erip_service_no'],
@@ -97,7 +78,10 @@ class BeGateway extends Okay
     $response = $transaction->submit();
 
     if (!$response->isSuccess()) {
-      return array('error'=>true);
+      return array(
+        'error'=>true,
+        'error_message' => $response->getMessage()
+      );
     }
 
     return array(
