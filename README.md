@@ -2,7 +2,7 @@
 
 ## Установка
 
-  * [Скачайте архив модуля](https://github.com/beGateway/okaycms-payment-module/raw/master/okaycms-payment-module.zip), распакуйте его и скопируйте его содержимое в корневую директорию вашей Okay CMS инсталляции.
+  * [Скачайте архив модуля](https://github.com/beGateway/okaycms-payment-module/raw/master/okaycms-payment-module.zip), распакуйте его и скопируйте его содержимое в директорию модулей вашей Okay CMS инсталляции (Okay/Modules/OkayCMS/).
 
 ## Настройка
 
@@ -13,35 +13,9 @@
 
 После этого доступен новый модуль оплаты.
 
-Далее вам нужно отредактировать шаблон вашей темы интернет-магазина. Ниже приведены изменения для шаблона по умолчанию, который находится по пути:
-
-```bash
-design/okay_shop/html/payments_form.tpl
-```
-
-Отредактируйте данный шаблон и добавьте в его конец следующий код:
-
-```html
-{elseif $payment_module == "BeGateway"}
-    {* Способ оплаты BeGateway *}
-    <div class="row">
-    {if $error }
-         <div class="message_error">
-             Ошибка получения токена на оплату! {$error_message|escape}
-         </div>
-    {else}
-         <form class="col-lg-7" method="post" action="{$action}">
-             <input type="hidden" name="token" value="{$token|escape}"/>
-             <input type="submit" name="submit-button" value="{$lang->form_to_pay}" class="button">
-         </form>
-    {/if}
-    </div>
-{/if}
-```
-
 ## Примечания
 
-Разработано и протестировано c OkayCMS 2.0.1
+Разработано и протестировано c OkayCMS 4.0.1
 
 ## Тестовые данные
 
