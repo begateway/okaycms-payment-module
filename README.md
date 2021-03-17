@@ -2,7 +2,7 @@
 
 ## Установка
 
-  * [Скачайте архив модуля](https://github.com/beGateway/okaycms-payment-module/raw/master/okaycms-payment-module.zip), распакуйте его и скопируйте его содержимое в директорию модулей вашей Okay CMS инсталляции (Okay/Modules/OkayCMS/).
+  * [Скачайте архив модуля](https://github.com/beGateway/okaycms-payment-module/raw/dev/okaycms-payment-module.zip), распакуйте его и скопируйте его содержимое в директорию модулей вашей Okay CMS инсталляции (Okay/Modules/OkayCMS/).
 
 ## Настройка
 
