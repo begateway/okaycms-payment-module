@@ -80,7 +80,7 @@ class PaymentForm extends AbstractModule implements PaymentFormInterface
         $settings = $paymentsEntity->getPaymentSettings($paymentMethod->id);
 
         if ($settings['debug']) {
-            $logger->info('begateway: Preparing request to get token for orderN' . $orderId . ' ...');
+            $logger->info('begateway: Preparing request to get token for order Nо' . $orderId . ' ...');
         }
 
         $token = new GetPaymentToken;
@@ -97,7 +97,7 @@ class PaymentForm extends AbstractModule implements PaymentFormInterface
         $price = round($this->money->convert($order->total_price, $paymentMethod->currency_id, false), 2);
         $token->money->setAmount($price);
 
-        $description = $lang['order_payment_N'] ? : 'Payment for orderN';
+        $description = $lang['order_payment_N'] ? : 'Payment for order Nо';
         $description = $description. $order->id . '.';
         $token->setDescription($description);
         $token->setTrackingId("$order->id|$order->payment_method_id");
