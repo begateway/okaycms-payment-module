@@ -3,6 +3,7 @@
 $lang['BeGateway'] = "BeGateway";
 $lang['shop-id'] = "ID магазина";
 $lang['secret-key'] = "Секретный ключ магазина";
+$lang['public-key'] = "Открытый ключ магазина";
 $lang['domain-gateway'] = "Введите домен платежного шлюза вашей платежной компании";
 $lang['domain-checkout'] = "Введите домен платежной страницы вашей платежной компании";
 $lang['payment'] = "Оплата";

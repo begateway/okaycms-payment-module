@@ -3,6 +3,7 @@
 $lang['BeGateway'] = "BeGateway";
 $lang['shop-id'] = "Shop ID";
 $lang['secret-key'] = "Secret key";
+$lang['public-key'] = "Public key";
 $lang['domain-gateway'] = "Please enter payment gateway domain of your payment processor";
 $lang['domain-checkout'] = "Please enter payment page domain of your payment processor";
 $lang['payment'] = "Payment";

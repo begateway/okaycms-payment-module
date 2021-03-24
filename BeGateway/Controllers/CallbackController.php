@@ -42,7 +42,10 @@ class CallbackController extends AbstractController
         $this->ordersEntity = $ordersEntity;
         $this->notify = $notify;
         $response = $this->webhook->getResponse();
-        $this->lang = CommonHelpers::initDictionary($response->transaction->language);
+
+        $this->lang = CommonHelpers::initDictionary(
+            CommonHelpers::mapLangLabelForOkayCMS($response->transaction->language)
+        );
 
         /* Сумма, которую заплатил покупатель.
         Дробная часть отделяется точкой. */
@@ -84,14 +87,8 @@ class CallbackController extends AbstractController
             $this->warnAndDie('not_authorised', $orderId);
         }
 
-        if ( $this->settings['debug'] ) {
-            $this->logger->info("begateway callback: The transaction is authorised.");
-        }
-
         $type = $this->webhook->getResponse()->transaction->type;
-        if ( $this->settings['debug'] ) {
-            $this->logger->info("begateway callback: The transaction type is: " . $type);
-        }
+
         if ($type == 'authorization') {
             $this->orderStatusCheck($type);
             die(0);

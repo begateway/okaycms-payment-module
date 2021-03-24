@@ -10,8 +10,8 @@
 		<name>{$lang->secret-key}</name>
 	</settings>
 	<settings>
-		<variable>domain-gateway</variable>
-		<name>{$lang->domain-gateway}</name>
+		<variable>public-key</variable>
+		<name>{$lang->public-key}</name>
 	</settings>
 	<settings>
 		<variable>domain-checkout</variable>

@@ -2,7 +2,8 @@
 
 $lang['BeGateway'] = "BeGateway";
 $lang['shop-id'] = "ID крамы";
-$lang['secret-key'] = "Сакрэтны ключ";
+$lang['secret-key'] = "Сакрэтны ключ крамы";
+$lang['public-key'] = "Адкрыты ключ крамы";
 $lang['domain-gateway'] = "Пазначце дамен плацёжнага шлюза вашага плацёжнага працэсара";
 $lang['domain-checkout'] = "Пазначце дамен старонкі аплаты вашага плацёжнага працэсара";
 $lang['payment'] = "Аплата";

@@ -113,17 +113,17 @@ class PaymentForm extends AbstractModule implements PaymentFormInterface
         $token->customer->setAddress($order->address);
         $token->customer->setEmail($order->email);
 
-        $orderUrl = Router::generateUrl('order', ['url' => $order->url], true);
-        $mainUrl = Router::generateUrl('main', ['url' => $order->url], true);
+        $orderUrl = Router::generateUrl('order', ['url' => $order->url], true, $currentLangId);
+        $mainUrl = Router::generateUrl('main', ['url' => $order->url], true, $currentLangId);
         $token->setSuccessUrl($orderUrl);
         $token->setDeclineUrl($orderUrl);
         $token->setFailUrl($orderUrl);
         $token->setCancelUrl($mainUrl);
-        $token->setNotificationUrl(Router::generateUrl('BeGateway_callback', [], true));
+        $token->setNotificationUrl(Router::generateUrl('BeGateway_callback', [], true, $currentLangId));
 
         $token->setExpiryDate(date("c", intval($settings['payment_valid']) * 60 + time() + 1));
 
-        $token->setLanguage($currentLangLabel);
+        $token->setLanguage(CommonHelpers::mapLangLabelForBeGateway($currentLangLabel));
 
         if ($settings['enable_bankcard']) {
             $cc = new CreditCard;
