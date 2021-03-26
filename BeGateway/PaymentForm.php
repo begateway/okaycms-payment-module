@@ -71,12 +71,13 @@ class PaymentForm extends AbstractModule implements PaymentFormInterface
         $SL = ServiceLocator::getInstance();
         $logger = $SL->getService(LoggerInterface::class);
 
-        $currentLangId    = (int) $this->languages->getLangId();
+        $order = $ordersEntity->get((int)$orderId);
+
+        $currentLangId    = (int) $order->lang_id;
         $currentLangLabel = $languagesEntity->get($currentLangId)->label;
 
         $lang = CommonHelpers::initDictionary($currentLangLabel);
 
-        $order = $ordersEntity->get((int)$orderId);
         $paymentMethod = $paymentsEntity->get($order->payment_method_id);
         $settings = $paymentsEntity->getPaymentSettings($paymentMethod->id);
 
