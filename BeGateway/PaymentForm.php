@@ -9,6 +9,7 @@ use BeGateway\GetPaymentToken;
 use BeGateway\PaymentMethod\CreditCard;
 use BeGateway\PaymentMethod\CreditCardHalva;
 use BeGateway\PaymentMethod\Erip;
+use BeGateway\Settings;
 use Okay\Core\EntityFactory;
 use Okay\Core\Modules\AbstractModule;
 use Okay\Core\Modules\Interfaces\PaymentFormInterface;
@@ -178,7 +179,6 @@ class PaymentForm extends AbstractModule implements PaymentFormInterface
             return $this->design->fetch('somethingWrong.tpl');
 
         } else {
-
             /*now look to the result array for the token*/
             $paymentUrl = $response->getRedirectUrlScriptName();
             $this->design->assign('paymentUrl', $paymentUrl);
@@ -186,10 +186,15 @@ class PaymentForm extends AbstractModule implements PaymentFormInterface
             $this->design->assign('language', $currentLangLabel);
             $this->design->assign('submit_begateway_payment',
                 $lang['submit_begateway_payment'] ? : "Make payment");
+            $this->design->assign('checkoutUrl', Settings::$checkoutBase);
 
             if ($settings['debug']) {
                 $logger->info('begateway: Token received, proposing customer submit payment and go to: ' . $paymentUrl);
             }
+
+            $jsUrl = explode('.', $settings['domain-checkout']);
+            $jsUrl[0] = 'js';
+            $this->design->assign('jsUrl', 'https://' . implode('.', $jsUrl) . '/widget/be_gateway.js');
             return $this->design->fetch('form.tpl');
         }
     }
