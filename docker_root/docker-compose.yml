@@ -1,0 +1,40 @@
+version: '3'
+services:
+
+  web:
+    build:
+      context: ./docker/dockerfiles/web
+    restart: always
+    ports:
+      - 80:80
+    volumes:
+      - ./../BeGateway:/var/www/app/BeGateway
+      - ./docker/etc/apache2:/etc/apache2
+      - ./docker/var/logs/apache2:/var/log/apache2
+      - ./docker/var/logs/php:/var/log/php
+      - okaycms-html:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - okaycms-net
+
+  mysql:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'okaycms-db'
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: 'root'
+      MYSQL_ROOT_PASSWORD: 'root'
+    volumes:
+      - okaycms-db:/var/lib/mysql
+    networks:
+      - okaycms-net
+
+volumes:
+  okaycms-db:
+  okaycms-html:
+
+networks:
+  okaycms-net:
+
