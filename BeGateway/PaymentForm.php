@@ -152,6 +152,7 @@ class PaymentForm extends AbstractModule implements PaymentFormInterface
 
         if ($settings['debug']){
             $logger->info('begateway: Requesting token for order ' . $order->id);
+            $logger->info('begateway: Token data ' . print_r($token, true));
         }
 
         $response = $token->submit();
