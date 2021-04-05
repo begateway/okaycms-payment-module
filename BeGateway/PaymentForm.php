@@ -96,7 +96,8 @@ class PaymentForm extends AbstractModule implements PaymentFormInterface
         }
 
         $paymentCurrency = $currenciesEntity->get(intval($paymentMethod->currency_id));
-        $token->money->setCurrency($paymentCurrency->code);
+        $paymentCurrencyCode = $paymentCurrency->code !== 'RUR' ? : 'RUB';
+        $token->money->setCurrency($paymentCurrencyCode);
 
         $price = round($this->money->convert($order->total_price, $paymentMethod->currency_id, false), 2);
         $token->money->setAmount($price);
