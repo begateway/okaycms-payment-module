@@ -124,8 +124,13 @@ class PaymentForm extends AbstractModule implements PaymentFormInterface
         $token->setFailUrl($orderUrl);
         $token->setCancelUrl($mainUrl);
         $token->setNotificationUrl(Router::generateUrl('BeGateway_callback', [], true, $currentLangId));
-
-        $token->setExpiryDate(date("c", intval($settings['payment_valid']) * 60 + time() + 1));
+        if($settings['payment_valid'] && intval($settings['payment_valid']) > 0) {
+            $paymentValidTime =  intval($settings['payment_valid']);
+        }
+        else{
+            $paymentValidTime = 60;
+        }
+        $token->setExpiryDate(date("c", $paymentValidTime * 60 + time() + 1));
 
         $token->setLanguage(CommonHelpers::mapLangLabelForBeGateway($currentLangLabel));
 
