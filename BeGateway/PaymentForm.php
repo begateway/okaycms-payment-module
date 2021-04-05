@@ -76,13 +76,15 @@ class PaymentForm extends AbstractModule implements PaymentFormInterface
         $currentLangId    = (int) $order->lang_id;
         $currentLangLabel = $languagesEntity->get($currentLangId)->label;
 
-        $lang = CommonHelpers::initDictionary($currentLangLabel);
-
         $paymentMethod = $paymentsEntity->get($order->payment_method_id);
         $settings = $paymentsEntity->getPaymentSettings($paymentMethod->id);
 
         if ($settings['debug']) {
             $logger->info('begateway: Preparing request to get token for order Nо' . $orderId . ' ...');
+            $lang = CommonHelpers::initDictionary($currentLangLabel, $logger);
+        }
+        else{
+            $lang = CommonHelpers::initDictionary($currentLangLabel);
         }
 
         $token = new GetPaymentToken;
@@ -157,9 +159,10 @@ class PaymentForm extends AbstractModule implements PaymentFormInterface
 
         $response = $token->submit();
 
-        $this->design->assign('cancelURL', $mainUrl);
+        $this->design->assign('cancel_url', $mainUrl);
         $this->design->assign('cancel_begateway_payment',
             $lang['cancel_begateway_payment'] ? : "Cancel order");
+        $this->design->assign('language', $currentLangLabel);
 
         if(!$response->isSuccess()) {
 
@@ -173,22 +176,20 @@ class PaymentForm extends AbstractModule implements PaymentFormInterface
                 $logger->info('begateway: ' . $errMsg1 . ' .' . $errMsg2);
             }
             $this->design->assign('something_wrong', $lang['something_wrong'] ? : "Something went wrong!");
-            $this->design->assign('errMsg', $errMsg1);
+            $this->design->assign('err_msg', $errMsg1);
             $this->design->assign('repeat_request',
                 $lang['repeat_request'] ? : "Try again");
-            $this->design->assign('orderURL', $orderUrl);
+            $this->design->assign('order_url', $orderUrl);
 
             return $this->design->fetch('somethingWrong.tpl');
-
         } else {
             /*now look to the result array for the token*/
             $paymentUrl = $response->getRedirectUrlScriptName();
-            $this->design->assign('paymentUrl', $paymentUrl);
+            $this->design->assign('payment_url', $paymentUrl);
             $this->design->assign('token', $response->getToken());
-            $this->design->assign('language', $currentLangLabel);
             $this->design->assign('submit_begateway_payment',
                 $lang['submit_begateway_payment'] ? : "Make payment");
-            $this->design->assign('checkoutUrl', Settings::$checkoutBase);
+                $this->design->assign('checkout_url', Settings::$checkoutBase);
 
             if ($settings['debug']) {
                 $logger->info('begateway: Token received, proposing customer submit payment and go to: ' . $paymentUrl);
@@ -196,7 +197,7 @@ class PaymentForm extends AbstractModule implements PaymentFormInterface
 
             $jsUrl = explode('.', $settings['domain-checkout']);
             $jsUrl[0] = 'js';
-            $this->design->assign('jsUrl', 'https://' . implode('.', $jsUrl) . '/widget/be_gateway.js');
+            $this->design->assign('js_url', 'https://' . implode('.', $jsUrl) . '/widget/be_gateway.js');
             return $this->design->fetch('form.tpl');
         }
     }

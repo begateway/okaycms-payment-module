@@ -14,19 +14,35 @@ class CommonHelpers
         Settings::$shopPubKey = $settings['public-key'] ? : '';
     }
 
-    public static function initDictionary($currentLangLabel)
+    public static function initDictionary($currentLangLabel, $logger = null)
     {
         $lang = [];
-        $currVocabularyFile = $_SERVER['DOCUMENT_ROOT']. '/Okay/Modules/OkayCMS/BeGateway/Backend/lang/'
-            . $currentLangLabel . '.php';
-
-        if(file_exists($currVocabularyFile)) {
-            $vocabularyFile = $currVocabularyFile;
-        } else {
-            $vocabularyFile = $_SERVER['DOCUMENT_ROOT']. '/Okay/Modules/OkayCMS/BeGateway/Backend/lang/en.php';
+        if ($logger){
+            $logger->info('begateway:initDictionary: Current lang is: ' . $currentLangLabel . '.');
         }
-        if(file_exists($vocabularyFile))
-            require_once ($vocabularyFile);
+        $pathToDictionaryFiles = dirname(__DIR__). '/Backend/lang/';
+        $currDictionaryFile = $pathToDictionaryFiles . $currentLangLabel . '.php';
+        if ($logger){
+            $logger->info('begateway:initDictionary: Dictionary path is: ' . $currDictionaryFile . '.');
+        }
+
+        if(is_readable($currDictionaryFile)) {
+            $dictionaryFile = $currDictionaryFile;
+            if ($logger) {
+                $logger->info('begateway:initDictionary: Dictionary file has been found!');
+            }
+        } else {
+            $dictionaryFile = $_SERVER['DOCUMENT_ROOT']. '/Okay/Modules/OkayCMS/BeGateway/Backend/lang/en.php';
+            if ($logger){
+                $logger->info('begateway:initDictionary: Dictionary not found! default will be used: ' . $currDictionaryFile . '.');
+            }
+        }
+        if(file_exists($dictionaryFile))
+            require ($dictionaryFile);
+
+        if ($logger) {
+            $logger->info('begateway:initDictionary: $lang=\'' . print_r($lang['repeat_request'], true) . '\'');
+        }
         return $lang;
     }
 

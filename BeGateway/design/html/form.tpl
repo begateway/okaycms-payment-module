@@ -1,7 +1,7 @@
-<script defer type="text/javascript" src="{$jsUrl|escape}"></script>
+<script defer type="text/javascript" src="{$js_url|escape}"></script>
 
-<div id="begateway_payment_form_container" data-checkout_url="{$checkoutUrl|escape}">
-    <form method="get" action="{$paymentUrl|escape}"
+<div id="begateway_payment_form_container" data-checkout_url="{$checkout_url|escape}">
+    <form method="get" action="{$payment_url|escape}"
           id="begateway_payment_form" accept-charset="utf-8"
           onSubmit="okaycms_start_begateway_payment_widget(event);">
 
@@ -13,5 +13,5 @@
 </div>
 <br>
 <div>
-    <a class="button" id="begateway_cancel_payment" href="{$cancelUrl|escape}">{$cancel_begateway_payment}</a>
+    <a class="button" id="begateway_cancel_payment" href="{$cancel_url|escape}">{$cancel_begateway_payment}</a>
 </div>
