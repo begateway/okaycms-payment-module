@@ -28,6 +28,9 @@ RUN mkdir /var/app
 
 ADD https://okay-cms.com/versions/OkayCMS_$version.zip /var/www/html
 
+RUN unzip /var/www/html/OkayCMS_$version.zip -d /var/www/html \
+  && rm -rf /var/www/html/OkayCMS_$version.zip
+
 VOLUME ["/var/www/html"]
 
 COPY docker-entrypoint.sh /var/app

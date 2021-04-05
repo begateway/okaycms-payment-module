@@ -20,6 +20,8 @@ if [ -d "$OKAYCMS_MODULES_DIR" ]; then
       echo "Error: BeGateway module not found in: "$BEGATEWAY_DIR"!"
     fi
   fi
+else
+  echo "Warn: OkayCMS modules dir "$OKAYCMS_MODULES_DIR" not exist! Probably OkayCMS has not been installed yet."
 fi
 
 /usr/local/bin/apache2-foreground

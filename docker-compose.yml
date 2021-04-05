@@ -19,8 +19,6 @@ services:
     restart: always
     environment:
       MYSQL_DATABASE: 'okaycms'
-      MYSQL_USER: 'root'
-      MYSQL_PASSWORD: 'root'
       MYSQL_ROOT_PASSWORD: 'root'
     volumes:
       - okaycms-db:/var/lib/mysql
