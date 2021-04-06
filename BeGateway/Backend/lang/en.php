@@ -32,7 +32,8 @@ $lang['something_wrong'] = "Something went wrong!";
 $lang['unable_to_get_token'] = "Unable to get payment token on order: ";
 $lang['reason'] = "Reason";
 
-$lang['payment_uid'] = "payment UID: ";
+$lang['payment_uid'] = "Payment UID: ";
+$lang['payment_method'] = "Payment method: ";
 $lang['payment_success'] = 'Payment success.';
 $lang['payment_failed'] = 'Payment failed.';
 $lang['payment_incomplete'] = 'Payment incomplete, order status not updated.';

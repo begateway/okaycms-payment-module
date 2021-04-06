@@ -138,12 +138,11 @@ class CallbackController extends AbstractController
 
     private function noticeUIDAndPaymentMethod(){
         $notice = array(
-            ' ',
             $this->lang['payment_uid'] . $this->webhook->getUid(),
-            'Payment method: ' . $this->webhook->getPaymentMethod()
+            $this->lang['payment_method'] . $this->webhook->getPaymentMethod()
         );
 
-        $notice = implode('<br>', $notice);
+        $notice = implode('. ', $notice);
         return $notice;
     }
 

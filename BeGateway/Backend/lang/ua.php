@@ -33,6 +33,7 @@ $lang['unable_to_get_token'] = "Неможливо отримати платіж
 $lang['reason'] = "Причина";
 
 $lang['payment_uid'] = "UID платежу: ";
+$lang['payment_method'] = "Спосіб оплати: ";
 $lang['payment_success'] = 'Оплата успішна.';
 $lang['payment_failed'] = 'Платіж не пройшов.';
 $lang['payment_incomplete'] = 'Платіж не завершений. Статус замовлення не змінений.';

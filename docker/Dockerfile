@@ -22,7 +22,8 @@ RUN apt-get update \
   && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/log/lastlog /var/log/faillog
 
 
-RUN a2enmod rewrite
+RUN a2enmod rewrite && \
+    cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
 
 RUN mkdir /var/app
 

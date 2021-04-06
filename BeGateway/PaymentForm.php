@@ -96,7 +96,7 @@ class PaymentForm extends AbstractModule implements PaymentFormInterface
         }
 
         $paymentCurrency = $currenciesEntity->get(intval($paymentMethod->currency_id));
-        $paymentCurrencyCode = $paymentCurrency->code !== 'RUR' ? : 'RUB';
+        $paymentCurrencyCode = ($paymentCurrency->code != 'RUR') ? $paymentCurrency->code : 'RUB';
         $token->money->setCurrency($paymentCurrencyCode);
 
         $price = round($this->money->convert($order->total_price, $paymentMethod->currency_id, false), 2);
@@ -110,11 +110,7 @@ class PaymentForm extends AbstractModule implements PaymentFormInterface
         list($firstName, $lastName) = $this->separateFullNameOnFirstNameAndLastName($order->name);
         $token->customer->setFirstName($firstName);
         $token->customer->setLastName($lastName);
-
-        //$token->customer->setCountry($order->get_billing_country());
-        //$token->customer->setCity($order->get_billing_city());
         $token->customer->setPhone($order->phone);
-        //$token->customer->setZip($order->get_billing_postcode());
         $token->customer->setAddress($order->address);
         $token->customer->setEmail($order->email);
 
@@ -124,7 +120,9 @@ class PaymentForm extends AbstractModule implements PaymentFormInterface
         $token->setDeclineUrl($orderUrl);
         $token->setFailUrl($orderUrl);
         $token->setCancelUrl($mainUrl);
-        $token->setNotificationUrl(Router::generateUrl('BeGateway_callback', [], true, $currentLangId));
+        $notification_url = Router::generateUrl('BeGateway_callback', [], true, $currentLangId);
+        $notification_url = str_replace('0.0.0.0', 'webhook.begateway.com:8443', $notification_url);
+        $token->setNotificationUrl($notification_url);
         if($settings['payment_valid'] && intval($settings['payment_valid']) > 0) {
             $paymentValidTime =  intval($settings['payment_valid']);
         }
@@ -148,7 +146,7 @@ class PaymentForm extends AbstractModule implements PaymentFormInterface
         if ($settings['enable_erip']) {
             $erip = new Erip(array(
                 'order_id' => $order->id,
-                'account_number' => ltrim($order->get_order_number()),
+                'account_number' => ltrim($order->id),
                 'service_no' => $this->settings['erip_service_no']
             ));
             $token->addPaymentMethod($erip);
