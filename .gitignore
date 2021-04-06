@@ -1,0 +1,4 @@
+.idea/
+.bash_history
+docker_root/docker/var/logs/
+.tags

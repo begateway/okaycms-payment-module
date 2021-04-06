@@ -1,6 +1,3 @@
-[submodule "payment/begateway/begateway-api-php"]
-	path = payment/begateway/begateway-api-php
-	url = https://github.com/beGateway/begateway-api-php
-[submodule "payment/BeGateway/begateway-api-php"]
-	path = payment/BeGateway/begateway-api-php
+[submodule "BeGateway/begateway-api-php"]
+	path = BeGateway/begateway-api-php
 	url = https://github.com/beGateway/begateway-api-php
